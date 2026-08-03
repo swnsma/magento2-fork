@@ -5,7 +5,11 @@
  */
 namespace Magento\Sales\Model\Service;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\ShipmentManagementInterface;
+use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\Shipment\CancelOperation;
 
 /**
  * Class ShipmentService
@@ -48,6 +52,11 @@ class ShipmentService implements ShipmentManagementInterface
     protected $notifier;
 
     /**
+     * @var CancelOperation
+     */
+    private $cancelOperation;
+
+    /**
      * Constructor
      *
      * @param \Magento\Sales\Api\ShipmentCommentRepositoryInterface $commentRepository
@@ -55,19 +64,23 @@ class ShipmentService implements ShipmentManagementInterface
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Sales\Api\ShipmentRepositoryInterface $repository
      * @param \Magento\Shipping\Model\ShipmentNotifier $notifier
+     * @param CancelOperation|null $cancelOperation
      */
     public function __construct(
         \Magento\Sales\Api\ShipmentCommentRepositoryInterface $commentRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Sales\Api\ShipmentRepositoryInterface $repository,
-        \Magento\Shipping\Model\ShipmentNotifier $notifier
+        \Magento\Shipping\Model\ShipmentNotifier $notifier,
+        ?CancelOperation $cancelOperation = null
     ) {
         $this->commentRepository = $commentRepository;
         $this->criteriaBuilder = $criteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->repository = $repository;
         $this->notifier = $notifier;
+        $this->cancelOperation = $cancelOperation
+            ?: ObjectManager::getInstance()->get(CancelOperation::class);
     }
 
     /**
@@ -105,5 +118,18 @@ class ShipmentService implements ShipmentManagementInterface
     {
         $shipment = $this->repository->get($id);
         return $this->notifier->notify($shipment);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function cancel($id)
+    {
+        $shipment = $this->repository->get($id);
+        if (!$shipment instanceof Shipment) {
+            throw new LocalizedException(__('This shipment cannot be canceled.'));
+        }
+        $this->cancelOperation->execute($shipment);
+        return true;
     }
 }

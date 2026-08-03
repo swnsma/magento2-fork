@@ -10,6 +10,7 @@
         <carriers>
             <flatrate>
                 <active>1</active>
+                <allow_cancel_shipment>0</allow_cancel_shipment>
                 <sallowspecific>0</sallowspecific>
                 <model>Magento\OfflineShipping\Model\Carrier\Flatrate</model>
                 <name>Fixed</name>
@@ -21,6 +22,7 @@
             </flatrate>
             <tablerate>
                 <active>0</active>
+                <allow_cancel_shipment>0</allow_cancel_shipment>
                 <sallowspecific>0</sallowspecific>
                 <condition_name>package_weight</condition_name>
                 <include_virtual_price>1</include_virtual_price>
@@ -32,6 +34,7 @@
             </tablerate>
             <freeshipping>
                 <active>0</active>
+                <allow_cancel_shipment>0</allow_cancel_shipment>
                 <sallowspecific>0</sallowspecific>
                 <cutoff_cost>50</cutoff_cost>
                 <model>Magento\OfflineShipping\Model\Carrier\Freeshipping</model>

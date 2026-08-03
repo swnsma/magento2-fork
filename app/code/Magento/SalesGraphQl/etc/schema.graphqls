@@ -220,6 +220,8 @@ type ShippingDiscount @doc(description:"Defines an individual shipping discount.
 type OrderShipment @doc(description: "Contains order shipment details.") {
     id: ID! @doc(description: "The unique ID for a `OrderShipment` object.")
     number: String! @doc(description: "The sequential credit shipment number.")
+    status: String @doc(description: "Shipment status code: new, canceled, or empty when unset.")
+    is_canceled: Boolean! @doc(description: "Indicates whether the shipment has been canceled.")
     tracking: [ShipmentTracking] @doc(description: "An array of shipment tracking details.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Shipment\\ShipmentTracking")
     items: [ShipmentItemInterface] @doc(description: "An array of items included in the shipment.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Shipment\\ShipmentItems")
     comments: [SalesCommentItem] @doc(description: "Comments added to the shipment.")

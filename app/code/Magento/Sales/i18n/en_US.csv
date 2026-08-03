@@ -827,3 +827,6 @@ If set YES Email field will be required during Admin order creation for new Cust
 "Cannot edit comment.","Cannot edit comment."
 "Update Comment","Update Comment"
 "Online refund amount must be greater than zero.", "Online refund amount must be greater than zero."
+"This shipment cannot be canceled.","This shipment cannot be canceled."
+"Shipment #%1 was canceled.","Shipment #%1 was canceled."
+"We cannot cancel the shipment because shipped quantity data is inconsistent.","We cannot cancel the shipment because shipped quantity data is inconsistent."

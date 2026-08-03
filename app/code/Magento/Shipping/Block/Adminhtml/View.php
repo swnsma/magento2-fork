@@ -5,6 +5,8 @@
  */
 namespace Magento\Shipping\Block\Adminhtml;
 
+use Magento\Sales\Model\Order\Shipment\CanCancel;
+
 /**
  * Adminhtml shipment create
  *
@@ -21,16 +23,25 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
+     * @var CanCancel
+     */
+    private $canCancel;
+
+    /**
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @param CanCancel|null $canCancel
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = []
+        array $data = [],
+        ?CanCancel $canCancel = null
     ) {
         $this->_coreRegistry = $registry;
+        $this->canCancel = $canCancel
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(CanCancel::class);
         parent::__construct($context, $data);
     }
 
@@ -74,6 +85,53 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 ]
             );
         }
+
+        $this->addCancelButton();
+    }
+
+    /**
+     * Add cancel shipment button when allowed.
+     *
+     * @return void
+     */
+    private function addCancelButton(): void
+    {
+        if (!$this->_authorization->isAllowed('Magento_Sales::shipment')) {
+            return;
+        }
+        if (!$this->canCancel->execute($this->getShipment())) {
+            return;
+        }
+
+        $confirmMessage = $this->escapeJs(
+            $this->escapeHtml(__('Are you sure you want to cancel this shipment?'))
+        );
+        // POST with form_key via mage/dataPost (third arg) for CSRF hardening.
+        $this->buttonList->add(
+            'cancel_shipment',
+            [
+                'label' => __('Cancel Shipment'),
+                'class' => 'delete',
+                'onclick' => "deleteConfirm('"
+                    . $confirmMessage
+                    . "', '"
+                    . $this->getCancelUrl()
+                    . "', {data: {}})"
+            ]
+        );
+    }
+
+    /**
+     * Get URL for canceling the shipment.
+     *
+     * @return string
+     */
+    public function getCancelUrl(): string
+    {
+        return $this->getUrl(
+            'adminhtml/order_shipment/cancel',
+            ['shipment_id' => $this->getShipment()->getId()]
+        );
     }
 
     /**

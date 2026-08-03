@@ -2071,11 +2071,26 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Check order shipments availability
      *
+     * Canceled shipments are ignored so order cancellation and similar checks
+     * reflect current fulfillment, not historical canceled documents.
+     *
      * @return bool
      */
     public function hasShipments()
     {
-        return (bool)$this->getShipmentsCollection()->count();
+        if (!$this->getId()) {
+            return false;
+        }
+        // Query a fresh collection: OrderRepository keeps an identity map, so the cached
+        // shipments collection can be stale after cancel/create in the same request.
+        $shipments = $this->_shipmentCollectionFactory->create()->setOrderFilter($this);
+        foreach ($shipments as $shipment) {
+            // Null/new/unknown statuses count as active; only explicit canceled is ignored.
+            if ((int)$shipment->getShipmentStatus() !== (int)Order\Shipment::STATUS_CANCELED) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

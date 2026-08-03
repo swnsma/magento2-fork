@@ -16,6 +16,7 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Shipment as ShipmentModel;
 
 /**
  * Resolve shipment information for order
@@ -50,16 +51,38 @@ class Shipments implements ResolverInterface
 
         $orderShipments = [];
         foreach ($shipments as $shipment) {
+            $statusCode = $this->resolveShipmentStatusCode($shipment);
             $orderShipments[] =
                 [
                     'id' => base64_encode($shipment->getIncrementId()),
                     'number' => $shipment->getIncrementId(),
+                    'status' => $statusCode,
+                    'is_canceled' => $statusCode === 'canceled',
                     'comments' => $this->getShipmentComments($shipment),
                     'model' => $shipment,
                     'order' => $order
                 ];
         }
         return $orderShipments;
+    }
+
+    /**
+     * Map shipment_status integer to a GraphQL-friendly code.
+     *
+     * @param ShipmentInterface $shipment
+     * @return string|null
+     */
+    private function resolveShipmentStatusCode(ShipmentInterface $shipment): ?string
+    {
+        $status = $shipment->getShipmentStatus();
+        if ($status === null || $status === '') {
+            return null;
+        }
+        return match ((int)$status) {
+            ShipmentModel::STATUS_CANCELED => 'canceled',
+            ShipmentModel::STATUS_NEW => 'new',
+            default => (string)$status,
+        };
     }
 
     /**

@@ -38,4 +38,15 @@ interface ShipmentManagementInterface
      * @return bool
      */
     public function notify($id);
+
+    /**
+     * Cancels a specified shipment (full document cancel).
+     *
+     * @param int $id The shipment ID.
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 103.0.0
+     */
+    public function cancel($id);
 }

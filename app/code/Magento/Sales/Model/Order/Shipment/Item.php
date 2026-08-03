@@ -165,6 +165,26 @@ class Item extends AbstractModel implements ShipmentItemInterface
         return $this;
     }
 
+    /**
+     * Reverse qty applied to the order item when the parent shipment is canceled.
+     *
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function cancel()
+    {
+        $orderItem = $this->getOrderItem();
+        $shipmentQty = (float)$this->getQty();
+        $qtyShipped = (float)$orderItem->getQtyShipped();
+        if ($qtyShipped + 0.0001 < $shipmentQty) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot cancel the shipment because shipped quantity data is inconsistent.')
+            );
+        }
+        $orderItem->setQtyShipped(max($qtyShipped - $shipmentQty, 0));
+        return $this;
+    }
+
     //@codeCoverageIgnoreStart
 
     /**

@@ -29,6 +29,11 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
 {
     public const STATUS_NEW = 1;
 
+    /**
+     * Shipment has been canceled (full document cancel).
+     */
+    public const STATUS_CANCELED = 2;
+
     public const REPORT_DATE_TYPE_ORDER_CREATED = 'order_created';
 
     public const REPORT_DATE_TYPE_SHIPMENT_CREATED = 'shipment_created';
@@ -289,8 +294,34 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         }
 
         $this->setTotalQty($totalQty);
+        if ($this->getShipmentStatus() === null) {
+            $this->setShipmentStatus(self::STATUS_NEW);
+        }
 
         return $this;
+    }
+
+    /**
+     * Check whether shipment is canceled.
+     *
+     * @return bool
+     */
+    public function isCanceled(): bool
+    {
+        return (int)$this->getShipmentStatus() === self::STATUS_CANCELED;
+    }
+
+    /**
+     * Retrieve shipment statuses option array.
+     *
+     * @return array
+     */
+    public function getStatuses(): array
+    {
+        return [
+            self::STATUS_NEW => __('New'),
+            self::STATUS_CANCELED => __('Canceled'),
+        ];
     }
 
     /**

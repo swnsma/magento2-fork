@@ -247,6 +247,12 @@
             <resource ref="Magento_Sales::shipment" />
         </resources>
     </route>
+    <route url="/V1/shipment/:id/cancel" method="POST">
+        <service class="Magento\Sales\Api\ShipmentManagementInterface" method="cancel"/>
+        <resources>
+            <resource ref="Magento_Sales::shipment" />
+        </resources>
+    </route>
     <route url="/V1/order/:orderId/ship" method="POST">
         <service class="Magento\Sales\Api\ShipOrderInterface" method="execute"/>
         <resources>

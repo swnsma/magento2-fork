@@ -19,6 +19,7 @@
                 <model>Magento\Dhl\Model\Carrier</model>
                 <account />
                 <active>0</active>
+                <allow_cancel_shipment>0</allow_cancel_shipment>
                 <title>DHL</title>
                 <type>DHL_XML</type>
                 <sallowspecific>0</sallowspecific>

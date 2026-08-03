@@ -14,6 +14,11 @@
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="allow_cancel_shipment" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Allow Cancel Shipment</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Allow full cancellation of Magento shipment documents for orders that used this carrier. Does not void carrier labels.</comment>
+                </field>
                 <field id="name" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Method Name</label>
                 </field>
@@ -73,6 +78,11 @@
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="allow_cancel_shipment" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Allow Cancel Shipment</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Allow full cancellation of Magento shipment documents for orders that used this carrier. Does not void carrier labels.</comment>
+                </field>
                 <field id="condition_name" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Condition</label>
                     <source_model>Magento\OfflineShipping\Model\Config\Source\Tablerate</source_model>
@@ -122,6 +132,11 @@
                 <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="allow_cancel_shipment" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Allow Cancel Shipment</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Allow full cancellation of Magento shipment documents for orders that used this carrier. Does not void carrier labels.</comment>
                 </field>
                 <field id="free_shipping_subtotal" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1">
                     <label>Minimum Order Amount</label>

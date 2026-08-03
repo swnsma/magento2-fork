@@ -18,6 +18,11 @@
                     <label>Enabled for Checkout</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="allow_cancel_shipment" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Allow Cancel Shipment</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Allow full cancellation of Magento shipment documents for orders that used this carrier. Does not void carrier labels.</comment>
+                </field>
                 <field id="allowed_methods" translate="label" type="multiselect" sortOrder="170" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Allowed Methods</label>
                     <source_model>Magento\Ups\Model\Config\Source\Method</source_model>
